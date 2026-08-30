@@ -1,0 +1,32 @@
+[
+  {
+    "id": "pt-eleanor-martinez",
+    "name": "Eleanor Martinez",
+    "age": 72,
+    "coverage": "Original Medicare Part B",
+    "item": "standard manual wheelchair",
+    "hcpcs": "K0001",
+    "city": "Chicago",
+    "zip_code": "60640"
+  },
+  {
+    "id": "pt-robert-chen",
+    "name": "Robert Chen",
+    "age": 68,
+    "coverage": "Original Medicare Part B",
+    "item": "CPAP device",
+    "hcpcs": "E0601",
+    "city": "Chicago",
+    "zip_code": "60601"
+  },
+  {
+    "id": "pt-maria-okafor",
+    "name": "Maria Okafor",
+    "age": 81,
+    "coverage": "Original Medicare Part B",
+    "item": "semi-electric hospital bed",
+    "hcpcs": "E0260",
+    "city": "Evanston",
+    "zip_code": "60201"
+  }
+]

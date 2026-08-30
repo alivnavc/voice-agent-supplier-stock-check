@@ -1,0 +1,22 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Lakeview Medical Supply, this is Dana. Doing well, how can I help?
+AGENT: Glad to hear it, Dana. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: Yes, we deliver to six zero six four zero and all of Chicago.
+  [tool] record_answer({"question": "delivers_to_zip", "answer": true, "quote": "Yes, we deliver to six zero six four zero and all of Chicago.", "confidence": "high"})
+AGENT: Perfect, thanks. Are you currently taking new Medicare patients?
+  PASS: ZIP recorded true
+  PASS: asked Medicare next, one question
+SUPPLIER: Yes, we're taking new Medicare patients.
+  [tool] record_answer({"question": "accepts_medicare", "answer": true, "quote": "Yes, we're taking new Medicare patients.", "confidence": "high"})
+AGENT: Great, thank you. Do you have a K zero zero zero one standard manual wheelchair in stock right now?
+SUPPLIER: Yes, we have four K zero zero zero one chairs in stock.
+  [tool] record_answer({"question": "item_in_stock", "answer": true, "quote": "Yes, we have four K zero zero zero one chairs in stock.", "confidence": "high"})
+AGENT: Thanks, that's good to hear. How soon could you deliver one to her home in 60640?
+SUPPLIER: We could deliver Thursday, Friday at the latest.
+  [tool] record_delivery_eta({"eta": "Thursday, Friday at the latest", "quote": "We could deliver Thursday, Friday at the latest.", "confidence": "high"})
+AGENT: That's everything I needed—thanks so much for your help, Dana. Have a great day!
+  [tool] end_call({"reason": "All questions answered, call complete."})
+AGENT: That's everything I needed—thanks so much for your help, Dana. Have a great day!
+  PASS: end_call after fourth answer
+  PASS: no unanswered
+  PASS: outcome is complete

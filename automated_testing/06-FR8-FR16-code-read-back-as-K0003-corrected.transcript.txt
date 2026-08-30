@@ -1,0 +1,14 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Lakeview, Dana.
+AGENT: Hi Dana, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Yes, 60640 is fine. Yes, we take Medicare.
+  [tool] record_answer({"question": "delivers_to_zip", "answer": true, "quote": "60640 is fine.", "confidence": "high"})
+  [tool] record_answer({"question": "accepts_medicare", "answer": true, "quote": "we take Medicare.", "confidence": "high"})
+AGENT: Great, thanks. Do you have a K0001 — that's K zero zero zero one — standard manual wheelchair in stock?
+SUPPLIER: So that's a K zero zero zero three?
+  [tool] check_code_readback({"heard": "K zero zero zero three"})
+AGENT: Sorry, it's K zero zero zero one — one, not three. Do you have that model in stock?
+  PASS: check_code_readback called
+  PASS: readback logged as wrong
+  PASS: corrects by spelling K0001
+  PASS: outcome is partial

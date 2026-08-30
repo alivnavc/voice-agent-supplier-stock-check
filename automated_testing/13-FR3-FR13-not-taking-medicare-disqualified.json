@@ -1,0 +1,71 @@
+{
+ "outcome": "disqualified",
+ "succeeded": true,
+ "supplier": {
+  "name": "Lakeview Medical Supply",
+  "phone": "+15513585175"
+ },
+ "patient": {
+  "name": "Eleanor Martinez",
+  "age": 72,
+  "coverage": "Original Medicare Part B",
+  "item": "standard manual wheelchair",
+  "hcpcs": "K0001",
+  "city": "Chicago",
+  "zip_code": "60640"
+ },
+ "answers": {
+  "delivers_to_zip": {
+   "value": true,
+   "quote": "Yes, we deliver to 60640.",
+   "confidence": "high"
+  },
+  "accepts_medicare": {
+   "value": false,
+   "quote": "No, we're not taking any new Medicare patients right now.",
+   "confidence": "high"
+  }
+ },
+ "unanswered": [
+  "item_in_stock",
+  "delivery_eta"
+ ],
+ "disqualified_by": "accepts_medicare",
+ "callee_questions": [],
+ "off_topic": [],
+ "background_heard": [],
+ "code_readbacks": [],
+ "holds": {
+  "count": 0,
+  "total_seconds": 0.0
+ },
+ "notes": [],
+ "end_reason": "Supplier is not taking new Medicare patients.",
+ "duration_seconds": 3.1,
+ "transcript": [],
+ "scenario": "13-FR3-FR13-not-taking-medicare-disqualified",
+ "mode": "text-mode scripted callee (no audio)",
+ "checks": [
+  {
+   "check": "Medicare recorded false",
+   "pass": true
+  },
+  {
+   "check": "end_call in same turn",
+   "pass": true
+  },
+  {
+   "check": "did not ask stock/ETA",
+   "pass": true
+  },
+  {
+   "check": "two unanswered listed",
+   "pass": true
+  },
+  {
+   "check": "outcome is disqualified",
+   "pass": true
+  }
+ ],
+ "passed": true
+}

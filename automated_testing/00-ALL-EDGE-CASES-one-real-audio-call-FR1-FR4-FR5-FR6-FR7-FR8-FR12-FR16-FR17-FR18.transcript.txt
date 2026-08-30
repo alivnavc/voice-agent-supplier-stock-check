@@ -1,0 +1,37 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Good. Lakevia Medical. This is Dana.
+AGENT: Nice to meet you, Dana. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: Uh, who's this for first?
+  [tool] callee_asked_question({"question": "Uh, who's this for first?"})
+AGENT: This is for Eleanor Martinez, one of our patients. Do you deliver to ZIP 60640 in Chicago?
+SUPPLIER: Hold on. Let me check.
+  [tool] callee_on_hold({"reason": "Let me check."})
+AGENT: Sure, take your time.
+SUPPLIER: Hey, Jack. Do we still have those manual chairs on the second rack?
+  [tool] background_talk({"heard": "Hey, Jack. Do we still have those manual chairs on the second rack?"})
+SUPPLIER: Yeah. Sorry about that. No. That's it's fine. We go up there all the time.
+AGENT: Thanks for checking. Just to confirm, do you deliver to ZIP code 60640?
+SUPPLIER: Yeah. Sorry about that. No. That's it's fine. We go through all the time.
+  [tool] record_answer({"question": "delivers_to_zip", "answer": true, "quote": "We go through all the time.", "confidence": "high"})
+AGENT: Great, thanks. Are you taking new Medicare patients right now?
+SUPPLIER: Yeah. We take Medicare. We've got those chairs in stock.
+  [tool] record_answer({"question": "accepts_medicare", "answer": true, "quote": "We take Medicare.", "confidence": "high"})
+  [tool] record_answer({"question": "item_in_stock", "answer": true, "quote": "We've got those chairs in stock.", "confidence": "high"})
+AGENT: Perfect, thank you. How soon could you deliver the wheelchair to her home?
+SUPPLIER: What cog was that again?
+  [tool] callee_asked_question({"question": "What cog was that again?"})
+AGENT: It's K zero zero zero one, a standard manual wheelchair. How soon could you deliver it to her home?
+SUPPLIER: K zero zero zero three.
+  [tool] check_code_readback({"heard": "K zero zero zero three"})
+AGENT: Sorry, it's K zero zero zero one — one, not three. How soon could you deliver it to her home?
+SUPPLIER: Got it.
+SUPPLIER: And are you the patient yourself or calling for someone?
+  [tool] callee_asked_question({"question": "And are you the patient yourself or calling for someone?"})
+AGENT: I'm calling on behalf of Eleanor's care team, not the patient herself. How soon could you deliver the wheelchair to her home?
+SUPPLIER: Quick one for you. What's two plus two?
+  [tool] callee_off_topic({"what": "Quick one for you. What's two plus two?"})
+AGENT: I can only help with the standard manual wheelchair order today. How soon could you deliver it to her home?
+SUPPLIER: We could have it there Thursday, maybe Friday at the latest.
+  [tool] record_delivery_eta({"eta": "Thursday, maybe Friday at the latest", "quote": "We could have it there Thursday, maybe Friday at the latest.", "confidence": "medium"})
+AGENT: That's perfect, thank you so much for your help. Have a great day!
+  [tool] end_call({"reason": "All questions answered, call complete."})

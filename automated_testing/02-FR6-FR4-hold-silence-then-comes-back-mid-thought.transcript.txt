@@ -1,0 +1,16 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Lakeview, this is Marcus.
+AGENT: Hi Marcus, thanks for picking up. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: Hold on, let me check.
+  [tool] callee_on_hold({"reason": "let me check"})
+AGENT: Sure, take your time.
+  PASS: callee_on_hold called
+  PASS: ack is six words or fewer
+  [20 s of silence — agent produces nothing; user_away_timeout=None, first check-in only at 150 s]
+SUPPLIER: ...yeah, no, that ZIP's fine, we go up there all the time.
+  [tool] record_answer({"question": "delivers_to_zip", "answer": true, "quote": "that ZIP's fine, we go up there all the time", "confidence": "high"})
+AGENT: Great, thanks. Are you taking new Medicare patients right now?
+  PASS: hold ended and ZIP recorded true
+  PASS: continues with Medicare
+  PASS: hold counted once
+  PASS: outcome is partial

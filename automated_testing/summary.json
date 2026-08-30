@@ -1,0 +1,111 @@
+{
+ "ran_at": "2026-08-29 23:46",
+ "model": "gpt-4.1",
+ "mode": "text-mode scripted callee \u2014 real prompt, tools and model; no audio, no phone",
+ "scenarios": [
+  {
+   "scenario": "01-FR1-FR5-FR17-straightforward-all-four-answers-under-a-minute",
+   "outcome": "complete",
+   "passed": true,
+   "checks": "5/5",
+   "seconds": 6.9,
+   "failed_checks": []
+  },
+  {
+   "scenario": "02-FR6-FR4-hold-silence-then-comes-back-mid-thought",
+   "outcome": "partial",
+   "passed": true,
+   "checks": "6/6",
+   "seconds": 2.9,
+   "failed_checks": []
+  },
+  {
+   "scenario": "03-FR6-FR12-hold-with-background-talk-not-for-us",
+   "outcome": "partial",
+   "passed": true,
+   "checks": "6/6",
+   "seconds": 3.8,
+   "failed_checks": []
+  },
+  {
+   "scenario": "04-FR7-FR4-FR17-callee-asks-who-is-this-for-and-are-you-the-patient",
+   "outcome": "partial",
+   "passed": true,
+   "checks": "6/6",
+   "seconds": 4.9,
+   "failed_checks": []
+  },
+  {
+   "scenario": "05-FR4-FR12-two-answers-in-one-sentence-not-reasked",
+   "outcome": "partial",
+   "passed": true,
+   "checks": "5/5",
+   "seconds": 3.3,
+   "failed_checks": []
+  },
+  {
+   "scenario": "06-FR8-FR16-code-read-back-as-K0003-corrected",
+   "outcome": "partial",
+   "passed": true,
+   "checks": "4/4",
+   "seconds": 2.9,
+   "failed_checks": []
+  },
+  {
+   "scenario": "07-FR10-FR6-wrong-person-hold-then-new-person-picks-up",
+   "outcome": "failed",
+   "passed": true,
+   "checks": "5/5",
+   "seconds": 2.3,
+   "failed_checks": []
+  },
+  {
+   "scenario": "08-FR2-FR12-FR13-does-not-deliver-to-zip-disqualified",
+   "outcome": "disqualified",
+   "passed": true,
+   "checks": "5/5",
+   "seconds": 2.6,
+   "failed_checks": []
+  },
+  {
+   "scenario": "09-FR11-FR13-voicemail-greeting-message-left",
+   "outcome": "voicemail",
+   "passed": true,
+   "checks": "4/4",
+   "seconds": 1.6,
+   "failed_checks": []
+  },
+  {
+   "scenario": "10-FR18-FR17-off-topic-four-times-then-hang-up",
+   "outcome": "failed",
+   "passed": true,
+   "checks": "6/6",
+   "seconds": 5.8,
+   "failed_checks": []
+  },
+  {
+   "scenario": "11-FR10b-FR13-wrong-number-apologise-and-hang-up",
+   "outcome": "wrong_number",
+   "passed": true,
+   "checks": "4/4",
+   "seconds": 2.5,
+   "failed_checks": []
+  },
+  {
+   "scenario": "12-FR19-FR14-garbled-word-is-asked-again-not-recorded-as-no",
+   "outcome": "partial",
+   "passed": true,
+   "checks": "5/5",
+   "seconds": 2.7,
+   "failed_checks": []
+  },
+  {
+   "scenario": "13-FR3-FR13-not-taking-medicare-disqualified",
+   "outcome": "disqualified",
+   "passed": true,
+   "checks": "5/5",
+   "seconds": 3.7,
+   "failed_checks": []
+  }
+ ]
+}

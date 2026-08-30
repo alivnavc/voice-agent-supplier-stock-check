@@ -1,0 +1,15 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Lakeview, Dana speaking.
+AGENT: Hi Dana, thanks for picking up. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: Yes, we deliver to 60640.
+  [tool] record_answer({"question": "delivers_to_zip", "answer": true, "quote": "Yes, we deliver to 60640.", "confidence": "high"})
+AGENT: Great, thanks. Are you currently taking new Medicare patients?
+SUPPLIER: No, we're not taking any new Medicare patients right now.
+  [tool] record_answer({"question": "accepts_medicare", "answer": false, "quote": "No, we're not taking any new Medicare patients right now.", "confidence": "high"})
+  [tool] end_call({"reason": "Supplier is not taking new Medicare patients."})
+AGENT: Thanks for letting me know. Have a good day.
+  PASS: Medicare recorded false
+  PASS: end_call in same turn
+  PASS: did not ask stock/ETA
+  PASS: two unanswered listed
+  PASS: outcome is disqualified

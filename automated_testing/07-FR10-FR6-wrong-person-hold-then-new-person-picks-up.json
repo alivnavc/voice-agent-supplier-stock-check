@@ -1,0 +1,64 @@
+{
+ "outcome": "failed",
+ "succeeded": false,
+ "supplier": {
+  "name": "Lakeview Medical Supply",
+  "phone": "+15513585175"
+ },
+ "patient": {
+  "name": "Eleanor Martinez",
+  "age": 72,
+  "coverage": "Original Medicare Part B",
+  "item": "standard manual wheelchair",
+  "hcpcs": "K0001",
+  "city": "Chicago",
+  "zip_code": "60640"
+ },
+ "answers": {},
+ "unanswered": [
+  "delivers_to_zip",
+  "accepts_medicare",
+  "item_in_stock",
+  "delivery_eta"
+ ],
+ "disqualified_by": null,
+ "callee_questions": [],
+ "off_topic": [],
+ "background_heard": [],
+ "code_readbacks": [],
+ "holds": {
+  "count": 1,
+  "total_seconds": 0.5
+ },
+ "notes": [
+  "on hold: transferring to someone else"
+ ],
+ "end_reason": "scenario script finished",
+ "duration_seconds": 2.3,
+ "transcript": [],
+ "scenario": "07-FR10-FR6-wrong-person-hold-then-new-person-picks-up",
+ "mode": "text-mode scripted callee (no audio)",
+ "checks": [
+  {
+   "check": "treated as hold",
+   "pass": true
+  },
+  {
+   "check": "re-introduces to the new person",
+   "pass": true
+  },
+  {
+   "check": "asks about ZIP (nothing recorded yet)",
+   "pass": true
+  },
+  {
+   "check": "hold counted once",
+   "pass": true
+  },
+  {
+   "check": "outcome is failed",
+   "pass": true
+  }
+ ],
+ "passed": true
+}

@@ -1,0 +1,13 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Doing good.
+AGENT: Glad to hear it. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: Nava.
+AGENT: Sorry, I didn't catch that. Do you deliver to ZIP code 60640?
+  PASS: nothing recorded from a garbled word
+  PASS: not disqualified
+  PASS: asks again / didn't catch that
+SUPPLIER: Sorry — yes, we deliver there.
+  [tool] record_answer({"question": "delivers_to_zip", "answer": true, "quote": "yes, we deliver there", "confidence": "high"})
+AGENT: Great, thanks. Are you taking new Medicare patients right now?
+  PASS: clear answer then recorded
+  PASS: outcome is partial

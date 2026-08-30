@@ -1,0 +1,75 @@
+{
+ "outcome": "partial",
+ "succeeded": false,
+ "supplier": {
+  "name": "Lakeview Medical Supply",
+  "phone": "+15513585175"
+ },
+ "patient": {
+  "name": "Eleanor Martinez",
+  "age": 72,
+  "coverage": "Original Medicare Part B",
+  "item": "standard manual wheelchair",
+  "hcpcs": "K0001",
+  "city": "Chicago",
+  "zip_code": "60640"
+ },
+ "answers": {
+  "delivers_to_zip": {
+   "value": true,
+   "quote": "Yep, we go up there.",
+   "confidence": "high"
+  },
+  "accepts_medicare": {
+   "value": true,
+   "quote": "Yeah we take Medicare",
+   "confidence": "high"
+  },
+  "item_in_stock": {
+   "value": true,
+   "quote": "we've got manual chairs in stock",
+   "confidence": "high"
+  }
+ },
+ "unanswered": [
+  "delivery_eta"
+ ],
+ "disqualified_by": null,
+ "callee_questions": [],
+ "off_topic": [],
+ "background_heard": [],
+ "code_readbacks": [],
+ "holds": {
+  "count": 0,
+  "total_seconds": 0.0
+ },
+ "notes": [],
+ "end_reason": "scenario script finished",
+ "duration_seconds": 3.3,
+ "transcript": [],
+ "scenario": "05-FR4-FR12-two-answers-in-one-sentence-not-reasked",
+ "mode": "text-mode scripted callee (no audio)",
+ "checks": [
+  {
+   "check": "two record_answer calls in one turn",
+   "pass": true
+  },
+  {
+   "check": "Medicare and stock both recorded",
+   "pass": true
+  },
+  {
+   "check": "did not re-ask Medicare",
+   "pass": true
+  },
+  {
+   "check": "only ETA remains",
+   "pass": true
+  },
+  {
+   "check": "outcome is partial",
+   "pass": true
+  }
+ ],
+ "passed": true
+}

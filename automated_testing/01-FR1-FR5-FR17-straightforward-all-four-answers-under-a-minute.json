@@ -1,0 +1,78 @@
+{
+ "outcome": "complete",
+ "succeeded": true,
+ "supplier": {
+  "name": "Lakeview Medical Supply",
+  "phone": "+15513585175"
+ },
+ "patient": {
+  "name": "Eleanor Martinez",
+  "age": 72,
+  "coverage": "Original Medicare Part B",
+  "item": "standard manual wheelchair",
+  "hcpcs": "K0001",
+  "city": "Chicago",
+  "zip_code": "60640"
+ },
+ "answers": {
+  "delivers_to_zip": {
+   "value": true,
+   "quote": "Yes, we deliver to six zero six four zero and all of Chicago.",
+   "confidence": "high"
+  },
+  "accepts_medicare": {
+   "value": true,
+   "quote": "Yes, we're taking new Medicare patients.",
+   "confidence": "high"
+  },
+  "item_in_stock": {
+   "value": true,
+   "quote": "Yes, we have four K zero zero zero one chairs in stock.",
+   "confidence": "high"
+  },
+  "delivery_eta": {
+   "value": "Thursday, Friday at the latest",
+   "quote": "We could deliver Thursday, Friday at the latest.",
+   "confidence": "high"
+  }
+ },
+ "unanswered": [],
+ "disqualified_by": null,
+ "callee_questions": [],
+ "off_topic": [],
+ "background_heard": [],
+ "code_readbacks": [],
+ "holds": {
+  "count": 0,
+  "total_seconds": 0.0
+ },
+ "notes": [],
+ "end_reason": "All questions answered, call complete.",
+ "duration_seconds": 6.3,
+ "transcript": [],
+ "scenario": "01-FR1-FR5-FR17-straightforward-all-four-answers-under-a-minute",
+ "mode": "text-mode scripted callee (no audio)",
+ "checks": [
+  {
+   "check": "ZIP recorded true",
+   "pass": true
+  },
+  {
+   "check": "asked Medicare next, one question",
+   "pass": true
+  },
+  {
+   "check": "end_call after fourth answer",
+   "pass": true
+  },
+  {
+   "check": "no unanswered",
+   "pass": true
+  },
+  {
+   "check": "outcome is complete",
+   "pass": true
+  }
+ ],
+ "passed": true
+}

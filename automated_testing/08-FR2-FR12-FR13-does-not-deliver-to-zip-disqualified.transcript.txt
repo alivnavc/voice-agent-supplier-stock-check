@@ -1,0 +1,13 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Lakeview Medical Supply, Dana speaking.
+AGENT: Hi Dana, thanks for picking up. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: No, sorry, we don't deliver up there — only the western suburbs.
+  [tool] record_answer({"question": "delivers_to_zip", "answer": false, "quote": "we don't deliver up there \u2014 only the western suburbs", "confidence": "high"})
+AGENT: Thanks for letting me know, Dana. Have a good day.
+  [tool] end_call({"reason": "Supplier does not deliver to 60640."})
+AGENT: Thanks for letting me know, Dana. Have a good day.
+  PASS: ZIP recorded false
+  PASS: end_call in same turn
+  PASS: did not ask Medicare/stock/ETA
+  PASS: three questions listed as unanswered
+  PASS: outcome is disqualified

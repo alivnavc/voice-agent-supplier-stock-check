@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DME Supplier Caller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#1b1f24; --muted:#6b7280; --line:#e5e7eb; --ok:#15803d; --warn:#b45309; --bad:#b91c1c; --accent:#1d4ed8; }
+  * { box-sizing:border-box } body { margin:0; font:14px/1.45 system-ui, sans-serif; color:var(--ink); background:var(--bg) }
+  header { padding:14px 22px; background:#fff; border-bottom:1px solid var(--line); display:flex; gap:18px; align-items:baseline }
+  header h1 { font-size:17px; margin:0 } header small { color:var(--muted) }
+  main { display:grid; grid-template-columns: 340px 1fr; gap:16px; padding:16px 22px; align-items:start }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px }
+  .card h2 { font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:0 0 10px }
+  label { display:block; font-size:12px; color:var(--muted); margin:10px 0 4px } select, input { width:100%; padding:7px 9px; border:1px solid var(--line); border-radius:7px; font:inherit; background:#fff }
+  button { font:inherit; padding:8px 14px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer } button.ghost { background:#fff; color:var(--accent) } button:disabled { opacity:.5; cursor:default }
+  .row { display:flex; gap:8px; align-items:center } .grow { flex:1 }
+  table { width:100%; border-collapse:collapse } th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); vertical-align:top } th { font-size:12px; color:var(--muted); font-weight:600 } tr.sel td { background:#eef2ff } tbody tr { cursor:pointer }
+  .pill { display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px; font-weight:600; background:#eee }
+  .pill.done,.pill.complete,.pill.disqualified { background:#dcfce7; color:var(--ok) } .pill.running { background:#dbeafe; color:var(--accent) } .pill.queued { background:#f3f4f6; color:var(--muted) } .pill.failed,.pill.no_answer { background:#fee2e2; color:var(--bad) } .pill.partial,.pill.voicemail { background:#fef3c7; color:var(--warn) }
+  .stats { display:flex; gap:14px } .stats div { flex:1; text-align:center } .stats b { display:block; font-size:22px }
+  .detail h3 { margin:14px 0 6px; font-size:14px } .muted { color:var(--muted) }
+  .answers td:first-child { font-family:ui-monospace, monospace; font-size:12px }
+  .conf { font-size:11px; padding:0 6px; border-radius:6px; background:#f3f4f6 } .conf.low { background:#fee2e2 } .conf.high { background:#dcfce7 }
+  .tx { max-height:420px; overflow:auto; border:1px solid var(--line); border-radius:8px; padding:8px } .tx div { padding:4px 6px; border-radius:6px; display:flex; gap:10px } .tx div:hover { background:#f3f4f6; cursor:pointer } .tx .t { color:var(--muted); font-family:ui-monospace, monospace; font-size:12px; min-width:52px } .tx .who { min-width:70px; font-weight:600 } .tx .agent .who { color:var(--accent) } .tx .tool { color:var(--muted); font-size:12px; font-family:ui-monospace, monospace } .tx .now { background:#eef2ff }
+  audio { width:100% } pre { font-size:12px; background:#f8fafc; border:1px solid var(--line); border-radius:8px; padding:8px; overflow:auto; max-height:220px }
+  .notice { font-size:12px; color:var(--warn) }
+</style>
+</head>
+<body>
+<header><h1>DME Supplier Caller</h1><small>queue → workflow → LiveKit voice agent</small><small id="callerid"></small></header>
+<main>
+  <section>
+    <div class="card">
+      <h2>New call</h2>
+      <label>Patient</label><select id="patient"></select>
+      <div id="pinfo" class="muted" style="font-size:12px;margin-top:4px"></div>
+      <label>Supplier</label><select id="supplier"></select>
+      <label>Workflow</label><select id="workflow"></select>
+      <div id="winfo" class="muted" style="font-size:12px;margin-top:4px"></div>
+      <div id="sipopts"><label>Phone to dial (E.164, blank = supplier's number)</label><input id="phone" placeholder="+1…"><div class="notice" id="sipnote"></div></div>
+      <div style="margin-top:14px" class="row"><button id="call">📞 Call</button><span id="msg" class="muted"></span></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h2>Queue</h2>
+      <div class="stats"><div><b id="q-queued">–</b><span class="muted">queued</span></div><div><b id="q-inflight">–</b><span class="muted">in flight</span></div><div><b id="q-dlq">–</b><span class="muted">dead-letter</span></div></div>
+      <div id="wfconc" class="muted" style="font-size:12px;margin-top:8px"></div>
+      <div id="dlq"></div>
+    </div>
+  </section>
+  <section>
+    <div class="card">
+      <h2>Jobs</h2>
+      <table><thead><tr><th>Job</th><th>Patient → Supplier</th><th>Line</th><th>Status</th><th>Outcome</th><th>Attempts</th><th>Updated</th></tr></thead><tbody id="jobs"></tbody></table>
+    </div>
+    <div class="card detail" id="detail" style="margin-top:14px" hidden></div>
+  </section>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+let cat, selected = null, itemsForSeek = [];
+const fmt = t => new Date(t*1000).toLocaleTimeString();
+const mmss = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+const esc = s => String(s ?? '').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+async function api(path, opts) { const r = await fetch(path, opts); if (!r.ok) throw new Error((await r.json()).detail || r.statusText); return r.json(); }
+
+async function loadCatalog() {
+  cat = await api('/api/catalog');
+  $('#patient').innerHTML = cat.patients.map(p => `<option value="${p.id}">${esc(p.name)} — ${esc(p.item)} (${p.hcpcs}) · ${p.zip_code}</option>`).join('');
+  $('#supplier').innerHTML = cat.suppliers.map(s => `<option value="${s.id}">${esc(s.name)} · ${s.phone}</option>`).join('');
+  $('#workflow').innerHTML = Object.values(cat.workflows).map(w => `<option value="${w.id}">${w.id}</option>`).join('');
+  $('#callerid').textContent = cat.caller_id ? `caller ID ${cat.caller_id}` : '';
+  $('#sipnote').textContent = cat.sip_ready ? 'Plivo trunk configured.' : 'No SIP trunk configured (run setup_sip).';
+  $('#wfconc').textContent = Object.values(cat.workflows).map(w => `${w.id}: concurrency ${w.concurrency}, max attempts ${w.max_attempts}`).join(' · ');
+  refreshInfo();
+}
+function refreshInfo() {
+  const p = cat.patients.find(p => p.id === $('#patient').value); const w = cat.workflows[$('#workflow').value];
+  $('#pinfo').textContent = p ? `${p.age}, ${p.coverage} · ${p.city} ${p.zip_code}` : '';
+  $('#winfo').textContent = w ? w.description : '';
+  const sup = cat.suppliers.find(s => s.id === $('#supplier').value); if (sup && !$('#phone').value) $('#phone').placeholder = sup.phone;
+}
+$('#patient').onchange = $('#workflow').onchange = $('#supplier').onchange = refreshInfo;
+
+$('#call').onclick = async () => {
+  $('#call').disabled = true; $('#msg').textContent = 'queueing…';
+  try {
+    const body = { patient_id: $('#patient').value, supplier_id: $('#supplier').value, workflow_id: $('#workflow').value, phone: $('#phone').value || null };
+    const r = await api('/api/calls', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(body) });
+    $('#msg').textContent = `queued ${r.job.job_id} (message ${r.message_id.slice(0,8)}…)`; selected = r.job.job_id; refresh();
+  } catch (e) { $('#msg').textContent = 'error: ' + e.message; }
+  $('#call').disabled = false;
+};
+
+async function refresh() {
+  const [jobs, q] = await Promise.all([api('/api/jobs'), api('/api/queue')]);
+  $('#q-queued').textContent = q.stats.queued - q.stats.in_flight; $('#q-inflight').textContent = q.stats.in_flight; $('#q-dlq').textContent = q.stats.dlq;
+  $('#dlq').innerHTML = q.dlq.length ? '<h3 style="font-size:12px;margin:10px 0 4px">Dead-letter queue</h3>' + q.dlq.map(m => `<div class="row" style="font-size:12px;margin:4px 0"><span class="grow">${m.body.job_id} — ${esc(m.attributes.dead_letter_reason)}</span><button class="ghost" onclick="redrive('${m.id}')">redrive</button></div>`).join('') : '';
+  $('#jobs').innerHTML = jobs.map(j => `<tr class="${j.job_id===selected?'sel':''}" onclick="show('${j.job_id}')">
+    <td><code>${j.job_id}</code></td><td>${esc(j.request.patient.name)} (${j.request.patient.hcpcs}, ${j.request.patient.zip_code})<br><span class="muted">→ ${esc(j.request.supplier.name)}</span></td>
+    <td>☎ ${esc(j.request.supplier.phone)}</td>
+    <td><span class="pill ${j.status}">${j.status}</span></td><td>${j.outcome ? `<span class="pill ${j.outcome}">${j.outcome}</span>` : ''}${j.error ? `<div class="muted" style="font-size:11px">${esc(j.error)}</div>` : ''}</td>
+    <td>${j.attempts}</td><td class="muted">${fmt(j.updated_at)}</td></tr>`).join('');
+  if (selected) show(selected, true);
+}
+async function redrive(id) { await api(`/api/dlq/${id}/redrive`, { method: 'POST' }); refresh(); }
+
+async function show(id, soft) {
+  selected = id; const j = await api(`/api/jobs/${id}`); const r = j.result; const d = $('#detail'); d.hidden = false;
+  if (soft && d.dataset.id === id && d.dataset.status === j.status && d.dataset.has === String(!!r)) return; // don't reset the audio player on poll
+  d.dataset.id = id; d.dataset.status = j.status; d.dataset.has = String(!!r);
+  let html = `<h2>Job ${id} — <span class="pill ${j.status}">${j.status}</span> ${r ? `<span class="pill ${r.outcome}">${r.outcome}</span>` : ''}</h2>
+    <div class="muted">${esc(j.request.patient.name)}, ${j.request.patient.age}, ${esc(j.request.patient.coverage)} · ${esc(j.request.patient.item)} (${j.request.patient.hcpcs}) · ${esc(j.request.patient.city)} ${j.request.patient.zip_code} → ${esc(j.request.supplier.name)} ${esc(j.request.supplier.phone)}</div>
+    <div class="muted">created ${fmt(j.created_at)} · workflow ${j.workflow_id} · attempts ${j.attempts}${j.room ? ' · room ' + j.room : ''}${j.error ? ' · <span style="color:var(--bad)">' + esc(j.error) + '</span>' : ''}</div>`;
+  if (r) {
+    const rec = r.recording ? '/recordings/' + r.recording.split('/').pop().replace(/\.ogg$/, '.mp3') : null;
+    html += `<h3>Result — ${r.succeeded ? '✅ actionable' : '⚠️ needs follow-up'} · ${r.duration_seconds}s · holds ${r.holds.count} (${r.holds.total_seconds}s)</h3>
+      <table class="answers"><tbody>${Object.entries(r.answers).map(([q,a]) => `<tr><td>${q}</td><td><b>${esc(a.value)}</b> <span class="conf ${a.confidence}">${a.confidence}</span></td><td class="muted">“${esc(a.quote)}”</td></tr>`).join('')}
+      ${r.unanswered.map(q => `<tr><td>${q}</td><td colspan="2" style="color:var(--bad)">not obtained</td></tr>`).join('')}</tbody></table>`;
+    if (r.callee_questions?.length) html += `<div class="muted" style="margin-top:6px">callee asked: ${r.callee_questions.map(esc).join(' · ')}</div>`;
+    if (r.code_readbacks?.length) html += `<div class="muted">code readbacks: ${r.code_readbacks.map(c => `“${esc(c.heard)}” → ${c.matches === true ? 'ok' : c.matches === false ? 'WRONG, corrected' : 'unclear, repeated'}`).join(' · ')}</div>`;
+    if (r.notes?.length) html += `<div class="muted">notes: ${r.notes.map(esc).join(' · ')}</div>`;
+    if (rec) html += `<h3>Recording <span class="muted" style="font-weight:normal">(started ${r.recording_started_at ? fmt(r.recording_started_at) : ''})</span></h3><audio id="player" controls src="${rec}"></audio>`;
+    html += `<h3>Transcript <span class="muted" style="font-weight:normal">click a line to seek</span></h3><div class="tx" id="tx">` + r.transcript.map((it, i) => {
+      const t = typeof it.t === 'number' ? mmss(it.t) : '';
+      if (it.type === 'message') { const c = Array.isArray(it.content) ? it.content.filter(x => typeof x === 'string').join(' ') : it.content; const who = it.role === 'user' ? 'supplier' : 'agent'; return `<div class="${who}" data-t="${it.t ?? ''}"><span class="t">${t}</span><span class="who">${who}</span><span>${esc(c)}</span></div>`; }
+      if (it.type === 'function_call') return `<div class="tool" data-t="${it.t ?? ''}"><span class="t">${t}</span><span class="who">tool</span><span>${esc(it.name)}(${esc(it.arguments)})</span></div>`;
+      if (it.type === 'function_call_output') return `<div class="tool" data-t="${it.t ?? ''}"><span class="t">${t}</span><span class="who">↳</span><span>${esc(it.output)}</span></div>`;
+      return '';
+    }).join('') + `</div>`;
+    if (r.audit && !r.audit.error) html += `<h3>Post-call audit (second model)</h3><table><tbody>${Object.entries(r.audit).map(([q,a]) => `<tr><td><code>${q}</code></td><td>${a.agrees === true ? '✅ agrees' : a.agrees === false ? '❌ disagrees' : '—'}</td><td class="muted">${esc(a.transcript_answer ?? 'not addressed')} ${a.note ? '· ' + esc(a.note) : ''}</td></tr>`).join('')}</tbody></table>`;
+    html += `<h3>Raw result</h3><pre>${esc(JSON.stringify({...r, transcript: undefined, audit: undefined}, null, 1))}</pre>`;
+  } else if (j.status === 'running') html += `<p class="muted">Call in progress on room <code>${j.room ?? '…'}</code>…</p>`;
+  d.innerHTML = html;
+  const player = $('#player');
+  if (player) { $('#tx').onclick = e => { const row = e.target.closest('[data-t]'); if (row && row.dataset.t !== '') { player.currentTime = +row.dataset.t; player.play(); } };
+    player.ontimeupdate = () => { let cur = null; document.querySelectorAll('#tx [data-t]').forEach(el => { el.classList.remove('now'); if (el.dataset.t !== '' && +el.dataset.t <= player.currentTime) cur = el; }); if (cur) cur.classList.add('now'); }; }
+}
+loadCatalog().then(refresh); setInterval(refresh, 2500);
+</script>
+</body>
+</html>

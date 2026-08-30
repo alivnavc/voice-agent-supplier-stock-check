@@ -1,0 +1,19 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Lakeview, Dana speaking.
+AGENT: Hi Dana, thanks for picking up. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: One sec, let me check with the warehouse.
+  [tool] callee_on_hold({"reason": "checking with the warehouse"})
+AGENT: Sure, take your time.
+SUPPLIER: Hey Jack, do we still have those manual chairs on the second rack?
+  [tool] background_talk({"heard": "Hey Jack, do we still have those manual chairs on the second rack?"})
+  PASS: background sentence not answered (background_talk or silence)
+  PASS: still on hold
+SUPPLIER: um
+  [dropped as background before the model]
+  PASS: one-word noise dropped before the model
+SUPPLIER: Sorry about that. Yes, we deliver to 60640.
+  [tool] record_answer({"question": "delivers_to_zip", "answer": true, "quote": "Yes, we deliver to 60640.", "confidence": "high"})
+AGENT: Great, thanks. Are you taking new Medicare patients right now?
+  PASS: came back: ZIP recorded true
+  PASS: background_heard logged
+  PASS: outcome is partial

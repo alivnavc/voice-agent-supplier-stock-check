@@ -1,0 +1,10 @@
+{
+  "supplier_check": {
+    "description": "Call one DME supplier about one patient: delivers to ZIP, taking Medicare, item in stock, ETA.",
+    "caller_agent": "supplier-caller",
+    "concurrency": 2,
+    "max_attempts": 2,
+    "visibility_timeout_s": 600,
+    "call_timeout_s": 480
+  }
+}

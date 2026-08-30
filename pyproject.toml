@@ -1,0 +1,32 @@
+[project]
+name = "supplier-caller"
+version = "0.1.0"
+description = "Voice agent that phones DME suppliers on behalf of a Medicare patient"
+requires-python = ">=3.12"
+dependencies = [
+  "livekit-agents[deepgram,openai,silero,turn-detector]>=1.7,<2",
+  "livekit-api>=1.0",
+  "livekit-plugins-noise-cancellation>=0.2",
+  "python-dotenv>=1.0",
+  "openai>=1.60",
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff", "mypy"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+markers = ["live: hits real LiveKit/Deepgram/OpenAI (deselect with -m 'not live')"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.setuptools]
+packages = ["supplier_caller"]
+
+[tool.setuptools.package-data]
+supplier_caller = ["data/*", "static/*"]

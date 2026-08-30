@@ -1,0 +1,11 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Hello?
+AGENT: Hi there! Good to connect. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: I think you've got the wrong number, this is a residence.
+  [tool] wrong_number({"what_they_said": "I think you've got the wrong number, this is a residence."})
+  [tool] end_call({"reason": "Wrong number, not a medical supplier."})
+AGENT: Sorry about that, have a good one.
+  PASS: wrong_number tool called
+  PASS: apologises and hangs up
+  PASS: does not re-ask
+  PASS: outcome is wrong_number

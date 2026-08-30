@@ -1,0 +1,13 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Lakeview.
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Uh, that's not me, hang on.
+  [tool] callee_on_hold({"reason": "transferring to someone else"})
+AGENT: Sure, take your time.
+  PASS: treated as hold
+SUPPLIER: Hi, this is Dana from intake, what can I do for you?
+AGENT: Hi Dana, this is Sam from Northside Care Partners. I'm calling about a standard manual wheelchair for a Medicare patient in Chicago — do you deliver to ZIP code 60640?
+  PASS: re-introduces to the new person
+  PASS: asks about ZIP (nothing recorded yet)
+  PASS: hold counted once
+  PASS: outcome is failed

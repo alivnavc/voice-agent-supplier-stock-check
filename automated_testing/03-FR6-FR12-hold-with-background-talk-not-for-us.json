@@ -1,0 +1,76 @@
+{
+ "outcome": "partial",
+ "succeeded": false,
+ "supplier": {
+  "name": "Lakeview Medical Supply",
+  "phone": "+15513585175"
+ },
+ "patient": {
+  "name": "Eleanor Martinez",
+  "age": 72,
+  "coverage": "Original Medicare Part B",
+  "item": "standard manual wheelchair",
+  "hcpcs": "K0001",
+  "city": "Chicago",
+  "zip_code": "60640"
+ },
+ "answers": {
+  "delivers_to_zip": {
+   "value": true,
+   "quote": "Yes, we deliver to 60640.",
+   "confidence": "high"
+  }
+ },
+ "unanswered": [
+  "accepts_medicare",
+  "item_in_stock",
+  "delivery_eta"
+ ],
+ "disqualified_by": null,
+ "callee_questions": [],
+ "off_topic": [],
+ "background_heard": [
+  "Hey Jack, do we still have those manual chairs on the second rack?",
+  "um"
+ ],
+ "code_readbacks": [],
+ "holds": {
+  "count": 1,
+  "total_seconds": 0.9
+ },
+ "notes": [
+  "on hold: checking with the warehouse"
+ ],
+ "end_reason": "scenario script finished",
+ "duration_seconds": 3.8,
+ "transcript": [],
+ "scenario": "03-FR6-FR12-hold-with-background-talk-not-for-us",
+ "mode": "text-mode scripted callee (no audio)",
+ "checks": [
+  {
+   "check": "background sentence not answered (background_talk or silence)",
+   "pass": true
+  },
+  {
+   "check": "still on hold",
+   "pass": true
+  },
+  {
+   "check": "one-word noise dropped before the model",
+   "pass": true
+  },
+  {
+   "check": "came back: ZIP recorded true",
+   "pass": true
+  },
+  {
+   "check": "background_heard logged",
+   "pass": true
+  },
+  {
+   "check": "outcome is partial",
+   "pass": true
+  }
+ ],
+ "passed": true
+}

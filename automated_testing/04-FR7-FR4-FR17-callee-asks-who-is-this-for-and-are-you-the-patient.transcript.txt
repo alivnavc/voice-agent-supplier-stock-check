@@ -1,0 +1,21 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Lakeview Medical Supply, this is Dana.
+AGENT: Hi Dana, thanks for picking up. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: Yes we deliver to 60640.
+  [tool] record_answer({"question": "delivers_to_zip", "answer": true, "quote": "Yes we deliver to 60640.", "confidence": "high"})
+AGENT: Great, thanks. Are you taking new Medicare patients right now?
+SUPPLIER: Wait — who's this for?
+  [tool] callee_asked_question({"question": "Wait \u2014 who's this for?"})
+AGENT: This is for Eleanor Martinez, one of our patients at Northside Care Partners. Are you taking new Medicare patients?
+  PASS: answers with patient name
+  PASS: picks thread back up: asks Medicare
+  PASS: did not re-ask ZIP
+SUPPLIER: Yes, we take Medicare.
+  [tool] record_answer({"question": "accepts_medicare", "answer": true, "quote": "Yes, we take Medicare.", "confidence": "high"})
+AGENT: Perfect, thank you. Do you have a K0001 standard manual wheelchair in stock?
+SUPPLIER: Are you the patient?
+  [tool] callee_asked_question({"question": "Are you the patient?"})
+AGENT: No, I'm not the patient—I'm calling on behalf of her care team. Do you have a K0001 standard manual wheelchair in stock?
+  PASS: says not the patient / care team
+  PASS: continues with stock
+  PASS: outcome is partial

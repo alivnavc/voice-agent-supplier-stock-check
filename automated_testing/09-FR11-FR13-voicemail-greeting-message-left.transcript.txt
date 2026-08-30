@@ -1,0 +1,10 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Thank you for calling Lakeview Medical Supply. Our office is currently closed. Please leave your name, number and a brief message after the tone. Beep.
+  [tool] voicemail_detected({})
+AGENT: Hi, this is Sam with Northside Care Partners, calling about a patient, Eleanor Martinez, who needs a K0001 standard manual wheelchair delivered to ZIP 60640. Could you call us back at 312-555-0142? Thanks.
+  [tool] end_call({"reason": "Left voicemail as instructed."})
+AGENT: Hi, this is Sam with Northside Care Partners, calling about a patient, Eleanor Martinez, who needs a K0001 standard manual wheelchair delivered to ZIP 60640. Could you call us back at 312-555-0142? Thanks.
+  PASS: voicemail_detected called
+  PASS: hangs up after message
+  PASS: four unanswered
+  PASS: outcome is voicemail

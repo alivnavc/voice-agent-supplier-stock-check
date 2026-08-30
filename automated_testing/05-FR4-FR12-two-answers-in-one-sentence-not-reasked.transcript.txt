@@ -1,0 +1,15 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Lakeview, this is Dana.
+AGENT: Hi Dana, thanks for picking up. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: Yep, we go up there.
+  [tool] record_answer({"question": "delivers_to_zip", "answer": true, "quote": "Yep, we go up there.", "confidence": "high"})
+AGENT: Great, thanks. Are you taking new Medicare patients right now?
+SUPPLIER: Yeah we take Medicare, and we've got manual chairs in stock.
+  [tool] record_answer({"question": "accepts_medicare", "answer": true, "quote": "Yeah we take Medicare", "confidence": "high"})
+  [tool] record_answer({"question": "item_in_stock", "answer": true, "quote": "we've got manual chairs in stock", "confidence": "high"})
+AGENT: Perfect, thank you. How soon could you deliver one to her home?
+  PASS: two record_answer calls in one turn
+  PASS: Medicare and stock both recorded
+  PASS: did not re-ask Medicare
+  PASS: only ETA remains
+  PASS: outcome is partial

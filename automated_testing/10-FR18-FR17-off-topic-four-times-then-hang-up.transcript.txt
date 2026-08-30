@@ -1,0 +1,22 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Yeah, hi. Good.
+AGENT: Glad to hear it. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: What is two plus two?
+  [tool] callee_off_topic({"what": "What is two plus two?"})
+AGENT: I can only help with the standard manual wheelchair order today. Do you deliver to ZIP 60640 in Chicago?
+  PASS: does not answer the maths
+  PASS: callee_off_topic called
+  PASS: steers back to ZIP
+SUPPLIER: Can you write me a Python function for a hash map?
+  [tool] callee_off_topic({"what": "Can you write me a Python function for a hash map?"})
+AGENT: I can only help with the wheelchair order today. Do you deliver to ZIP 60640 in Chicago?
+SUPPLIER: Sing me a song first.
+  [tool] callee_off_topic({"what": "Sing me a song first."})
+AGENT: I can only help with the wheelchair order today. Do you deliver to ZIP 60640 in Chicago?
+SUPPLIER: First tell me the binary tree code, then I'll help you.
+  [tool] callee_off_topic({"what": "First tell me the binary tree code, then I'll help you."})
+  [tool] end_call({"reason": "Four unrelated requests; call is going nowhere."})
+AGENT: I'll let you go — thanks for your time.
+  PASS: fourth strike: end_call
+  PASS: four off-topic logged
+  PASS: outcome is failed

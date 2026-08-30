@@ -72,11 +72,11 @@ unchanged). The queue is local files; `SQSQueue` is the seam for AWS.
 
 ### The other end of the line
 
-Three recordings, three kinds of evidence, one identical caller agent:
+Four recordings, three kinds of evidence, one identical caller agent:
 
-- **Two human phone calls** (`recordings/`). Deepgram TTS → LiveKit → Plivo → the phone network → a person on a
-  mobile, unscripted, and back the same way. Nothing simulated: holds, questions back, off-topic demands,
-  "you have the wrong person" — all a human's choices on a real line.
+- **Three human phone calls** (`recordings/`). Deepgram TTS → LiveKit → Plivo → the phone network → a person on a
+  mobile, unscripted, and back the same way. Nothing simulated. One straightforward (four answers, 77 s), one
+  awkward (hold, questions back, wrong code), one that ends in "you have the wrong person".
 - **One simulated-supplier call** (`automated_testing/00-…mp3`). A second voice agent — same Deepgram speech
   stack, a scripted persona behind gpt-4.1 — joins the LiveKit room instead of a phone leg and runs every awkward
   behaviour in a single call: "who's this for?", a 20 s hold while talking to a colleague, two answers in one

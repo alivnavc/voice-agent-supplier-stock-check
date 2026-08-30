@@ -1,0 +1,18 @@
+AGENT: Hi, this is Sam from Northside Care Partners — how are you today?
+SUPPLIER: Yeah. I'm good.
+AGENT: Glad to hear it. I'm calling about a standard manual wheelchair for one of our Medicare patients in Chicago — do you deliver to ZIP code 60640?
+SUPPLIER: Yes. We do that anyway.
+  [tool] record_answer({"question": "delivers_to_zip", "answer": true, "quote": "Yes. We do that anyway.", "confidence": "high"})
+AGENT: Great, thanks. Are you currently taking new Medicare patients?
+SUPPLIER: Yes. We do.
+  [tool] record_answer({"question": "accepts_medicare", "answer": true, "quote": "Yes. We do.", "confidence": "high"})
+AGENT: Perfect, thanks. Do you have a K0001 standard manual wheelchair in stock right now?
+SUPPLIER: We have. Correct. No.
+AGENT: Sorry, just to be clear — do you have the K0001 standard manual wheelchair in stock?
+SUPPLIER: We do have in stock.
+  [tool] record_answer({"question": "item_in_stock", "answer": true, "quote": "We do have in stock.", "confidence": "high"})
+AGENT: Thanks for confirming. How soon could you deliver it to her home in 60640?
+SUPPLIER: Maybe coming two days.
+  [tool] record_delivery_eta({"eta": "about two days", "quote": "Maybe coming two days.", "confidence": "medium"})
+AGENT: That's all I needed—thanks so much for your help! Have a great day.
+  [tool] end_call({"reason": "All questions answered, call complete."})

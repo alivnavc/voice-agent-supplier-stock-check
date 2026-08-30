@@ -19,16 +19,17 @@ Design, cut list and roadmap are in **[WRITEUP.md](WRITEUP.md)**.
 
 ## 🎧 Recordings — start here
 
-Three calls. The first two are **real phone calls to a human**; the third is **one call where a simulated
+Four calls. The first three are **real phone calls to a human**; the fourth is **one call where a simulated
 supplier throws every edge case at the agent**. Every recording is real audio out of the same agent.
 
 | | call | what happens | outcome | 🔊 audio | 📄 transcript | 🧾 result |
 |---|---|---|---|---|---|---|
-| **1** | **Human, real phone — awkward but successful** | "who is this for?", hold while the person talks to a colleague, code read back wrong ("K one zero one") and corrected, all four answers | `complete`, 124 s | [▶ mp3](recordings/scenario-1-complete-hold-and-wrong-code-readback.mp3) | [open](recordings/scenario-1-complete-hold-and-wrong-code-readback.transcript.txt) | [json](results/scenario-1-complete-hold-and-wrong-code-readback.json) |
-| **2** | **Human, real phone — guardrails** | asks the agent to write Python (refused, steered back), Medicare-vs-Medicaid question, then "you have the wrong person" → apology, hang-up | `wrong_number`, 95 s | [▶ mp3](recordings/scenario-2-off-topic-then-wrong-number.mp3) | [open](recordings/scenario-2-off-topic-then-wrong-number.transcript.txt) | [json](results/scenario-2-off-topic-then-wrong-number.json) |
-| **3** | **Simulated supplier — every edge case in one call** (automated test) | "who's this for?" → 20 s hold while talking to a colleague in the background → two answers in one breath → "K zero zero zero three" caught and corrected → "are you the patient?" → "what's two plus two?" refused → delivery date | `complete`, 150 s | [▶ mp3](automated_testing/00-ALL-EDGE-CASES-one-real-audio-call-FR1-FR4-FR5-FR6-FR7-FR8-FR12-FR16-FR17-FR18.mp3) | [open](automated_testing/00-ALL-EDGE-CASES-one-real-audio-call-FR1-FR4-FR5-FR6-FR7-FR8-FR12-FR16-FR17-FR18.transcript.txt) | [json](automated_testing/00-ALL-EDGE-CASES-one-real-audio-call-FR1-FR4-FR5-FR6-FR7-FR8-FR12-FR16-FR17-FR18.json) |
+| **1** | **Human, real phone — straightforward** | answers everything directly; one unclear reply ("We have. Correct. No.") is clarified rather than guessed; audit agrees on all four | `complete`, 77 s | [▶ mp3](recordings/scenario-0-straightforward-all-four-answers.mp3) | [open](recordings/scenario-0-straightforward-all-four-answers.transcript.txt) | [json](results/scenario-0-straightforward-all-four-answers.json) |
+| **2** | **Human, real phone — awkward but successful** | "who is this for?", hold while the person talks to a colleague, code read back wrong ("K one zero one") and corrected, all four answers | `complete`, 124 s | [▶ mp3](recordings/scenario-1-complete-hold-and-wrong-code-readback.mp3) | [open](recordings/scenario-1-complete-hold-and-wrong-code-readback.transcript.txt) | [json](results/scenario-1-complete-hold-and-wrong-code-readback.json) |
+| **3** | **Human, real phone — guardrails** | asks the agent to write Python (refused, steered back), Medicare-vs-Medicaid question, then "you have the wrong person" → apology, hang-up | `wrong_number`, 95 s | [▶ mp3](recordings/scenario-2-off-topic-then-wrong-number.mp3) | [open](recordings/scenario-2-off-topic-then-wrong-number.transcript.txt) | [json](results/scenario-2-off-topic-then-wrong-number.json) |
+| **4** | **Simulated supplier — every edge case in one call** (automated test) | "who's this for?" → 20 s hold while talking to a colleague in the background → two answers in one breath → "K zero zero zero three" caught and corrected → "are you the patient?" → "what's two plus two?" refused → delivery date | `complete`, 150 s | [▶ mp3](automated_testing/00-ALL-EDGE-CASES-one-real-audio-call-FR1-FR4-FR5-FR6-FR7-FR8-FR12-FR16-FR17-FR18.mp3) | [open](automated_testing/00-ALL-EDGE-CASES-one-real-audio-call-FR1-FR4-FR5-FR6-FR7-FR8-FR12-FR16-FR17-FR18.transcript.txt) | [json](automated_testing/00-ALL-EDGE-CASES-one-real-audio-call-FR1-FR4-FR5-FR6-FR7-FR8-FR12-FR16-FR17-FR18.json) |
 
-Calls 1–2: the supplier is a person on a mobile phone (Plivo → PSTN), unscripted. Call 3: the supplier is a second
+Calls 1–3: the supplier is a person on a mobile phone (Plivo → PSTN), unscripted. Call 4: the supplier is a second
 voice agent playing a scripted persona in a LiveKit room; the caller agent is identical and does not know which
 it is talking to. 13 more scripted scenarios, one requirement group each, are indexed in
 **[`automated_testing/README.md`](automated_testing/README.md)**.
@@ -42,11 +43,11 @@ LiveKit room, sent over a Plivo SIP trunk to the public phone network, and the s
 same way through voice detection → end-of-turn detection → Deepgram speech-to-text → gpt-4.1 → text-to-speech.
 Pauses, interruptions and mishearings in the recordings all really happened on a phone line.
 
-**On the two human calls (1 and 2), nothing is simulated.** The supplier is a person on a mobile phone playing
+**On the three human calls (1–3), nothing is simulated.** The supplier is a person on a mobile phone playing
 the role unscripted — holds, questions back, off-topic demands, "wrong person". The agent never knows in advance
 what it will get.
 
-**On call 3 (the automated test), the supplier is simulated.** It is a second voice agent in the same LiveKit
+**On call 4 (the automated test), the supplier is simulated.** It is a second voice agent in the same LiveKit
 room — same Deepgram speech stack, a scripted persona behind gpt-4.1 — that runs through every awkward
 behaviour in one call. The audio is still real (its speech is synthesised, sent as audio, and heard by the
 caller through the same voice detection → speech-to-text path); only the *person* is scripted. The caller
@@ -277,7 +278,8 @@ tests/             unit tests + live behaviour tests
 automated_testing/ 13 scripted scenarios run against the real prompt/tools/model in text mode —
                      index in automated_testing/README.md; per scenario a .transcript.txt and .json,
                      named by the requirements they cover (e.g. 08-FR2-FR12-FR13-does-not-deliver-to-zip…)
-recordings/        call audio (.mp3) + transcripts, two real phone calls (manual testing):
+recordings/        call audio (.mp3) + transcripts, three real phone calls (manual testing):
+                     scenario-0-straightforward-all-four-answers          — cooperative supplier, four answers, 77 s
                      scenario-1-complete-hold-and-wrong-code-readback  — "who is this for?", hold with a colleague
                                                                          talking in the background, code read back
                                                                          wrong and corrected, all four answers

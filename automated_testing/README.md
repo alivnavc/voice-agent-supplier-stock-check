@@ -1,7 +1,7 @@
 # Automated testing — scenario index
 
 > **Listen first:** [▶ the one call with every edge case](00-ALL-EDGE-CASES-one-real-audio-call-FR1-FR4-FR5-FR6-FR7-FR8-FR12-FR16-FR17-FR18.mp3) ([transcript](00-ALL-EDGE-CASES-one-real-audio-call-FR1-FR4-FR5-FR6-FR7-FR8-FR12-FR16-FR17-FR18.transcript.txt) · [result](00-ALL-EDGE-CASES-one-real-audio-call-FR1-FR4-FR5-FR6-FR7-FR8-FR12-FR16-FR17-FR18.json)) — simulated supplier, real audio.
-> The two **human** phone calls are in [`../recordings/`](../recordings/): [▶ awkward-but-complete](../recordings/scenario-1-complete-hold-and-wrong-code-readback.mp3) · [▶ off-topic then wrong number](../recordings/scenario-2-off-topic-then-wrong-number.mp3).
+> The three **human** phone calls are in [`../recordings/`](../recordings/): [▶ straightforward](../recordings/scenario-0-straightforward-all-four-answers.mp3) · [▶ awkward-but-complete](../recordings/scenario-1-complete-hold-and-wrong-code-readback.mp3) · [▶ off-topic then wrong number](../recordings/scenario-2-off-topic-then-wrong-number.mp3).
 > All three are summarised in the main [README → Recordings](../README.md#-recordings--start-here).
 
 Two kinds of evidence, both produced by the **real caller agent** (same prompt, same tools, same model). Click a link in a row to open that scenario's audio, transcript or result JSON.
